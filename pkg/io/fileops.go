@@ -1,29 +1,25 @@
 package io
 
 import (
-	"encoding/json"
+	"fmt"
 	"os"
 )
 
-func ReadJSONFile(filePath string) (map[string]interface{}, error) {
-	data, err := os.ReadFile(filePath)
+func ReadFile(filePath string) []byte {
+	content, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, err
+		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+		os.Exit(1)
 	}
 
-	var result map[string]interface{}
-	if err := json.Unmarshal(data, &result); err != nil {
-		return nil, err
-	}
-
-	return result, nil
+	return content
 }
 
-func WriteJSONFile(filePath string, content interface{}) error {
-	data, err := json.Marshal(content)
-	if err != nil {
-		return err
-	}
+func WriteFile(filePath string, content interface{}) {
+	data := []byte(fmt.Sprintf("%v", content))
 
-	return os.WriteFile(filePath, data, 0644)
+	if err := os.WriteFile(filePath, data, 0644); err != nil {
+		fmt.Fprintf(os.Stderr, "Error writing file: %v\n", err)
+		os.Exit(1)
+	}
 }

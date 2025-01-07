@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -54,9 +55,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	themeFileData, err := io.ReadJSONFile(themeDetails.Path)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading theme file: %v\n", err)
+	themeFileDataRaw := io.ReadFile(themeDetails.Path)
+	var themeFileData map[string]interface{}
+	if err := json.Unmarshal(themeFileDataRaw, &themeFileData); err != nil {
+		fmt.Fprintf(os.Stderr, "Error parsing theme file: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -85,21 +87,9 @@ func main() {
 	windowsTerminalThemeFile := filepath.Join(themeDir, "windows-terminal-theme.json")
 	starshipPaletteFile := filepath.Join(themeDir, "starship.palette.toml")
 
-	if err := io.WriteJSONFile(windowsTerminalSchemeFile, windowsTerminalScheme); err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing scheme file: %v\n", err)
-		os.Exit(1)
-	}
-
-	if err := io.WriteJSONFile(windowsTerminalThemeFile, windowsTerminalTheme); err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing theme file: %v\n", err)
-		os.Exit(1)
-	}
-
-	// write string to file
-	if err := os.WriteFile(starshipPaletteFile, []byte(starshipPalette), 0644); err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing palette file: %v\n", err)
-		os.Exit(1)
-	}
+	io.WriteFile(windowsTerminalSchemeFile, windowsTerminalScheme)
+	io.WriteFile(windowsTerminalThemeFile, windowsTerminalTheme)
+	io.WriteFile(starshipPaletteFile, starshipPalette)
 
 	fmt.Println("Files generated successfully")
 }
