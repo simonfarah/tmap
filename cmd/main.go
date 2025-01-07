@@ -83,8 +83,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	windowsTerminalSchemeFile := filepath.Join(themeDir, "windows-terminal-scheme.json")
-	windowsTerminalThemeFile := filepath.Join(themeDir, "windows-terminal-theme.json")
+	windowsTerminalSchemeFile := filepath.Join(themeDir, "windows-terminal.scheme.json")
+	windowsTerminalThemeFile := filepath.Join(themeDir, "windows-terminal.theme.json")
 	starshipPaletteFile := filepath.Join(themeDir, "starship.palette.toml")
 
 	io.WriteFile(windowsTerminalSchemeFile, windowsTerminalScheme)
