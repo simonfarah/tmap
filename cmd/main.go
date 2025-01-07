@@ -68,6 +68,7 @@ func main() {
 
 	windowsTerminalScheme := converters.ConvertToWindowsTerminalScheme(themeColors, themeDetails.Name)
 	windowsTerminalTheme := converters.ConvertToWindowsTerminalTheme(themeColors, themeDetails.Name, themeDetails.IsDarkTheme)
+	starshipPalette := converters.ConvertToStarshipPalette(themeColors, themeDetails.Name)
 
 	if err := os.MkdirAll("generated", os.ModePerm); err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating 'generated' directory: %v\n", err)
@@ -82,6 +83,7 @@ func main() {
 
 	windowsTerminalSchemeFile := filepath.Join(themeDir, "windows-terminal-scheme.json")
 	windowsTerminalThemeFile := filepath.Join(themeDir, "windows-terminal-theme.json")
+	starshipPaletteFile := filepath.Join(themeDir, "starship.palette.toml")
 
 	if err := io.WriteJSONFile(windowsTerminalSchemeFile, windowsTerminalScheme); err != nil {
 		fmt.Fprintf(os.Stderr, "Error writing scheme file: %v\n", err)
@@ -90,6 +92,12 @@ func main() {
 
 	if err := io.WriteJSONFile(windowsTerminalThemeFile, windowsTerminalTheme); err != nil {
 		fmt.Fprintf(os.Stderr, "Error writing theme file: %v\n", err)
+		os.Exit(1)
+	}
+
+	// write string to file
+	if err := os.WriteFile(starshipPaletteFile, []byte(starshipPalette), 0644); err != nil {
+		fmt.Fprintf(os.Stderr, "Error writing palette file: %v\n", err)
 		os.Exit(1)
 	}
 
