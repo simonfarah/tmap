@@ -6,6 +6,7 @@ TMap is a command-line tool designed to convert Visual Studio Code themes into c
 
 - Automatically detect installed VS Code themes.
 - Convert to Windows Terminal scheme and theme.
+- Convert to Starship palette.
 
 ## Installation
 
